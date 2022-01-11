@@ -71,7 +71,7 @@ class Ruian
     end
 
     def county_integration_file
-      @count_integration_file = directory.join('strukturovane-CSV', 'vazby-okresy-cr.csv')
+      @count_integration_file = directory.join('strukturovane-CSV', 'vazby-orp-cr.csv')
     end
 
     def region_integration_file

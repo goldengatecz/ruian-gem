@@ -22,7 +22,7 @@ class Ruian
     end
 
     def needed
-      ['vazby-cr.csv', 'vazby-okresy-cr.csv']
+      ['vazby-cr.csv', 'vazby-orp-cr.csv']
     end
   end
 end
