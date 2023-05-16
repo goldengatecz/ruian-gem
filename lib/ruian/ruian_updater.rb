@@ -20,7 +20,7 @@ class Ruian
     def download
       puts "Downloading #{url}"
       File.open(filepath, "wb") do |file|
-        open(url) do |opened_url|
+        URI.open(url) do |opened_url|
           file.write(opened_url.read)
         end
       end
