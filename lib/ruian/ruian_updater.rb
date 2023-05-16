@@ -18,7 +18,7 @@ class Ruian
     end
 
     def download
-      puts "Downloading #{url}"
+      puts "Downloading #{url} to #{filepath}"
       File.open(filepath, "wb") do |file|
         URI.open(url) do |opened_url|
           file.write(opened_url.read)
