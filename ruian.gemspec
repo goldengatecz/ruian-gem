@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'csv'
   spec.add_dependency 'logger'
   spec.add_dependency 'net-http'
+  spec.add_dependency 'nokogiri'
   spec.add_dependency 'ruby-progressbar'
   spec.add_dependency 'rubyzip', '~> 3.1'
 

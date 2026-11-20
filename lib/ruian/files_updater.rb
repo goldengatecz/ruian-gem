@@ -9,7 +9,7 @@ class Ruian
     end
 
     def url
-      "https://vdp.cuzk.cz/vymenny_format/csv/#{most_recent_file}_OB_ADR_csv.zip"
+      "https://vdp.cuzk.cz/vymenny_format/csv/#{snapshot_stamp}_OB_ADR_csv.zip"
     end
 
     def filepath

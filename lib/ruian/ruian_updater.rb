@@ -12,26 +12,30 @@ class Ruian
 
     attr_reader :directory
 
-    def initialize(directory = fixtures_directory)
+    def initialize(directory = fixtures_directory, snapshot_date: nil)
       @directory = directory
+      @snapshot_date = snapshot_date
     end
 
     def update!(remove: true, download_new: false)
-      download if !filepath.exist? || download_new
+      @update_url = url
+      download if !filepath.exist? || download_new || cached_snapshot_outdated?
       unpack
       remove_temp if remove
     rescue StandardError
       discard_archive
       raise
+    ensure
+      @update_url = nil
     end
 
     def download
-      uri = trusted_uri!(url)
+      uri = trusted_uri!(@update_url || url)
       puts "Downloading #{uri} to #{filepath}"
       discard_archive
       File.open(partial_path, 'wb') { |file| fetch(uri, file) }
       # A manifest without its archive only causes a fresh download next time.
-      write_manifest(partial_path)
+      write_manifest(partial_path, source_url: uri.to_s)
       File.rename(partial_path, filepath)
     rescue StandardError
       discard_archive
@@ -90,6 +94,20 @@ class Ruian
     end
 
     private
+
+    def snapshot_stamp
+      @snapshot_date ? @snapshot_date.strftime('%Y%m%d') : most_recent_file
+    end
+
+    def cached_snapshot_outdated?
+      manifest = read_manifest
+      cached_url = manifest['url'] if manifest.is_a?(Hash)
+      return false unless cached_url.is_a?(String)
+
+      # Only a different release of the same archive can be replaced as stale.
+      release = %r{(?<=/)\d{8}(?=_)}
+      cached_url.sub(release, '') == @update_url.sub(release, '') && cached_url != @update_url
+    end
 
     def discard_archive
       FileUtils.rm_f([filepath, manifest_path, partial_path])

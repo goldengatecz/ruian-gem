@@ -30,6 +30,11 @@ into a temporary directory, then replace the previous CSV tree. Extraction
 limits are defined in `Ruian::ZipExtraction::LIMITS`. A failed update removes
 the failed archive so the next attempt downloads a fresh copy.
 
+Pass the same `snapshot_date:` to both updaters when importing a monthly release.
+`Ruian::VfrChanges` reads the daily `ST_ZZSZ` and `ST_ZADS` releases and checks
+their predecessor links. `Ruian::InspireAddresses` resolves batches of address
+codes through the ČÚZK WFS when a consumer needs the complete address.
+
 You can import rows.
 
 ```

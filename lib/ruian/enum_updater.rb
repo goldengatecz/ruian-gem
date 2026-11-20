@@ -2,7 +2,7 @@ class Ruian
   class EnumUpdater < RuianUpdater
 
     def url
-      "https://vdp.cuzk.cz/vymenny_format/csv/#{most_recent_file}_strukt_ADR.csv.zip"
+      "https://vdp.cuzk.cz/vymenny_format/csv/#{snapshot_stamp}_strukt_ADR.csv.zip"
     end
 
     def file_name

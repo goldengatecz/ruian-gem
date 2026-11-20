@@ -34,3 +34,41 @@ RSpec.describe Ruian::FilesUpdater do
     expect(@directory.children).to contain_exactly(updater.csv_directory)
   end
 end
+
+RSpec.describe 'Monthly RUIAN release selection' do
+  it 'keeps the requested URL when the month changes during a download and refreshes a kept older archive' do
+    Dir.mktmpdir do |directory|
+      root = Pathname.new(directory)
+      updater = Ruian::FilesUpdater.new(root)
+      fixture = root.join('fixture.zip')
+      Zip::File.open(fixture, create: true) do |archive|
+        archive.get_output_stream('CSV/addresses.csv') { |output| output.write('addresses') }
+      end
+      payload = fixture.binread
+      now = Time.utc(2026, 10, 31, 23, 59)
+      allow(updater).to receive(:most_recent_file).and_wrap_original { |original| original.call(now) }
+
+      requests = []
+      connection = instance_double(Net::HTTP)
+      allow(Net::HTTP).to receive(:start).and_yield(connection)
+      allow(connection).to receive(:request) do |request, &block|
+        requests << request.uri.to_s
+        now = Time.utc(2026, 11, 1)
+        response = Net::HTTPOK.new('1.1', '200', 'OK')
+        allow(response).to receive(:read_body).and_yield(payload)
+        block.call(response)
+      end
+
+      updater.update!(remove: false)
+      manifest = root.join('csv.zip.manifest.json')
+      expect(JSON.parse(manifest.read).fetch('url')).to eq(requests.first)
+      expect(requests.first).to include('/20260930_')
+      expect(updater.csv_directory.join('addresses.csv').read).to eq('addresses')
+
+      updater.update!(remove: false)
+      expect(requests.size).to eq(2)
+      expect(requests.last).to include('/20261031_')
+      expect(JSON.parse(manifest.read).fetch('url')).to eq(requests.last)
+    end
+  end
+end
