@@ -7,6 +7,8 @@ require 'ruian/fetcher'
 require 'ruian/ruian_updater'
 require 'ruian/files_updater'
 require 'ruian/enum_updater'
+require 'ruian/vfr_changes'
+require 'ruian/inspire_addresses'
 require 'ruian/importer'
 require 'ruian/railtie' if defined?(Rails)
 require 'logger'

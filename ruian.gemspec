@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Josef Šimánek", 'Petr Šnobl']
   spec.email         = ["josef.simanek@gmail.com", 'snoblucha@gmail.com']
   spec.summary       = %q{RUIAN}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/goldengatecz/ruian-gem"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
@@ -17,10 +17,13 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
+  spec.add_dependency 'csv'
+  spec.add_dependency 'logger'
+  spec.add_dependency 'net-http'
+  spec.add_dependency 'nokogiri'
   spec.add_dependency 'ruby-progressbar'
-  spec.add_dependency 'rubyzip'
+  spec.add_dependency 'rubyzip', '~> 3.1'
 
-  spec.add_development_dependency "bundler", "~> 1.6"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
 end
