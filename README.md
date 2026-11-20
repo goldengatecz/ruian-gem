@@ -1,7 +1,6 @@
 # Ruian
 
-RUIAN gem for downloading RUIAN addresses from http://nahlizenidokn.cuzk.cz/StahniAdresniMistaRUIAN.aspx. 
-It downloads files and then it can pass data to importer.
+RUIAN gem for downloading ČÚZK address data and passing it to an importer.
 
 ## Installation
 
@@ -20,6 +19,16 @@ Or install it yourself as:
 ## Usage
 
 See example directory.
+
+`Ruian::FilesUpdater` and `Ruian::EnumUpdater` download over verified HTTPS from
+`vdp.cuzk.cz` and `vdp.cuzk.gov.cz`. Each archive has a `.manifest.json` sidecar
+with its source URL, size and SHA-256. Keep the sidecar with the archive when
+using `update!(remove: false)`; both are needed to reuse the download.
+
+The updaters use rubyzip 3 to extract regular files from the relevant CSV tree
+into a temporary directory, then replace the previous CSV tree. Extraction
+limits are defined in `Ruian::ZipExtraction::LIMITS`. A failed update removes
+the failed archive so the next attempt downloads a fresh copy.
 
 You can import rows.
 

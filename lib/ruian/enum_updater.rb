@@ -1,12 +1,8 @@
-require 'open-uri'
-require 'fileutils'
-require 'zip'
-
 class Ruian
   class EnumUpdater < RuianUpdater
 
     def url
-      "http://vdp.cuzk.cz/vymenny_format/csv/#{most_recent_file}_strukt_ADR.csv.zip"
+      "https://vdp.cuzk.cz/vymenny_format/csv/#{most_recent_file}_strukt_ADR.csv.zip"
     end
 
     def file_name
